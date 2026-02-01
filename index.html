@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borang Tempahan Kemudahan SSeMS - Rasmi</title>
+    <style>
+        /* CSS UNTUK PAPARAN DAN CETAKAN A4 */
+        :root {
+            --primary-color: #000;
+            --bg-color: #f0f0f0;
+            --paper-color: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            font-family: "Times New Roman", Times, serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Bekas Kertas A4 */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+            background: var(--paper-color);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            font-size: 8pt;
+            line-height: 1.2;
+            color: #000;
+        }
+
+        /* Header Pejabat */
+        .header {
+            border-bottom: 2px solid #000;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo-school {
+            height: 70px;
+            width: auto;
+        }
+
+        .header-text {
+            text-align: center;
+        }
+
+        .header-text h1 {
+            font-size: 12pt;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .header-text p {
+            margin: 1px 0;
+            font-size: 8pt;
+        }
+
+        .form-title {
+            text-align: center;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 8px 0;
+            font-size: 11pt;
+        }
+
+        /* Grid & Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 4px;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+            width: 30%;
+        }
+
+        .section-title {
+            background-color: #e0e0e0;
+            font-weight: bold;
+            padding: 4px;
+            border: 1px solid #000;
+            margin-top: 8px;
+            font-size: 8.5pt;
+        }
+
+        /* Input Styling */
+        input[type="text"], 
+        input[type="date"], 
+        input[type="time"], 
+        textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 8pt;
+            outline: none;
+            padding: 0;
+            margin: 0;
+        }
+        textarea {
+            resize: none;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 4px;
+            transform: scale(0.9);
+        }
+
+        /* Specifying Input styling */
+        .spec-container {
+            margin-left: 15px;
+            margin-top: 2px;
+            display: flex;
+            align-items: flex-end;
+            font-size: 8pt;
+        }
+        
+        .spec-label {
+            white-space: nowrap;
+            margin-right: 5px;
+            font-style: italic;
+        }
+
+        .inline-input-line {
+            border: none;
+            border-bottom: 1px solid #000;
+            flex-grow: 1;
+            font-family: inherit;
+            font-size: 8pt;
+            background: transparent;
+            outline: none;
+            padding-bottom: 1px;
+        }
+
+        /* Ruangan Tandatangan */
+        .signature-box {
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .sig-col {
+            width: 45%;
+            border: 1px solid #000;
+            padding: 8px;
+            min-height: 80px;
+        }
+
+        .cop-placeholder {
+            border: 1px dashed #ccc;
+            width: 100px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7pt;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        /* Floating Action Buttons */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            font-family: sans-serif;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-print { background-color: #333; }
+        .btn-email { background-color: #d44638; }
+        .btn-save { background-color: #28a745; }
+
+        /* Print Media Queries */
+        @media print {
+            body { background: none; padding: 0; }
+            .a4-page { 
+                box-shadow: none; 
+                margin: 0; 
+                width: 210mm; 
+                height: 297mm;
+                border: none;
+            }
+            .controls { display: none !important; }
+            input::placeholder, textarea::placeholder { color: transparent; }
+            input, textarea { border: none !important; }
+            .inline-input-line { border-bottom: 1px solid #000 !important; }
+            .date-picker-inline { border-bottom: 1px solid #000 !important; }
+            .cop-placeholder { border: 1px solid #eee; }
+        }
+
+        .date-picker-inline {
+            width: auto !important;
+            display: inline-block;
+            border-bottom: 1px dotted #000 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="a4-page" id="form-content">
+        <!-- HEADER RASMI -->
+        <div class="header">
+            <div class="header-container">
+                <!-- Logo Sekolah -->
+                <img src="https://i.postimg.cc/Bb5S1Zb4/SENI.jpg" alt="Logo SSeMS" class="logo-school" onerror="this.src='https://via.placeholder.com/80?text=LOGO'">
+                
+                <div class="header-text">
+                    <h1>Sekolah Seni Malaysia Sarawak (SSeMS)</h1>
+                    <p>Lot 7794, Blok 9, Salak Land District, Jalan Sultan Tengah, 93050 Kuching, Sarawak</p>
+                    <p>Tel: 082-510356 | Faks: 082-510357 | Emel: yea1210@moe.edu.my</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-title">BORANG PERMOHONAN TEMPAHAN KEMUDAHAN GUNA SAMA</div>
+
+        <!-- BAHAGIAN A: PEMOHON -->
+        <div class="section-title">BAHAGIAN A: MAKLUMAT PEMOHON & TEMPAHAN</div>
+        <table>
+            <tr>
+                <th>Nama Penuh Pemohon</th>
+                <td><input type="text" id="nama" placeholder="Taip nama penuh di sini"></td>
+            </tr>
+            <tr>
+                <th>No. Kad Pengenalan</th>
+                <td><input type="text" id="no_kp" placeholder="000000-00-0000"></td>
+            </tr>
+            <tr>
+                <th>Jawatan & Unit/Jabatan</th>
+                <td><input type="text" id="jawatan" placeholder="Cth: PPP DG44 / Unit Seni Visual"></td>
+            </tr>
+            <tr>
+                <th>Tujuan Penggunaan</th>
+                <td><textarea id="tujuan" rows="2" placeholder="Nyatakan tujuan program/aktiviti"></textarea></td>
+            </tr>
+            <tr>
+                <th>Fasiliti Dipohon</th>
+                <td>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                        <div>
+                            <label><input type="checkbox" name="fasi" value="Auditorium"> Auditorium</label><br>
+                            <label><input type="checkbox" name="fasi" value="Bilik Mesyuarat Utama"> Bilik Mesyuarat Utama</label><br>
+                            <label><input type="checkbox" name="fasi" value="Bilik Mesyuarat Kecil"> Bilik Mesyuarat Kecil</label><br>
+                            <label><input type="checkbox" name="fasi" value="Lobi Bawah Auditorium / Lobi Seni Teater"> Lobi Bawah Auditorium / Seni Teater</label>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" name="fasi" value="Foyer Akademik"> Foyer Akademik</label><br>
+                            <label><input type="checkbox" name="fasi" value="Padang / Gelanggang Sukan"> Padang / Gelanggang Sukan</label><br>
+                            <div class="spec-container">
+                                <span class="spec-label">Jenis Sukan:</span>
+                                <input type="text" id="f_sukan_detail" class="inline-input-line" placeholder="Cth: Bola Keranjang/Bola Jaring/Bola Tampar/Bola Baling/Sepak Takraw dll.">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Tarikh & Masa Mula</th>
+                <td><input type="date" id="t_mula"> Jam: <input type="time" id="j_mula"></td>
+            </tr>
+            <tr>
+                <th>Tarikh & Masa Tamat</th>
+                <td><input type="date" id="t_tamat"> Jam: <input type="time" id="j_tamat"></td>
+            </tr>
+            <tr>
+                <th>Bilangan Peserta</th>
+                <td><input type="text" id="bil_peserta" placeholder="Cth: 50 orang"></td>
+            </tr>
+        </table>
+
+        <div style="margin: 8px 0;">
+            <p>Saya mengaku akan bertanggungjawab ke atas keselamatan dan kebersihan kemudahan yang digunakan.</p>
+            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 4px;">
+                <div style="margin-top: 15px;">..........................................................</div>
+                <div style="margin-bottom: 4px;">(Tandatangan Pemohon)</div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span style="width: 45px;">Jawatan:</span>
+                    <input type="text" id="j_permohonan_sig" class="inline-input-line" style="width: 250px;" placeholder="Taip jawatan pemohon">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span style="width: 45px;">Tarikh:</span>
+                    <input type="date" id="t_permohonan" class="date-picker-inline">
+                </div>
+                <div class="cop-placeholder">
+                    Cop Rasmi
+                </div>
+            </div>
+        </div>
+
+        <!-- BAHAGIAN B: SOKONGAN -->
+        <div class="section-title">BAHAGIAN B: SOKONGAN (KETUA UNIT / JABATAN)</div>
+        <div class="signature-box">
+            <div class="sig-col">
+                <p>Ulasan:</p>
+                <textarea rows="2" placeholder="Taip ulasan sokongan di sini"></textarea>
+                <div style="margin-top: 15px;">
+                    <label><input type="checkbox"> DISOKONG</label> &nbsp;
+                    <label><input type="checkbox"> TIDAK DISOKONG</label>
+                </div>
+            </div>
+            <div class="sig-col" style="display: flex; flex-direction: column; justify-content: flex-end;">
+                <p>......................................................</p>
+                <p>Tandatangan & Cop Rasmi</p>
+            </div>
+        </div>
+
+        <!-- BAHAGIAN C: KELULUSAN -->
+        <div class="section-title">BAHAGIAN C: KELULUSAN (PENTADBIR / PENGETUA)</div>
+        <div class="signature-box">
+            <div class="sig-col">
+                <p>Keputusan:</p>
+                <div style="margin-top: 8px;">
+                    <label><input type="checkbox"> DILULUSKAN</label><br>
+                    <label><input type="checkbox"> TIDAK DILULUSKAN</label>
+                </div>
+                <p style="margin-top: 8px;">Catatan:</p>
+                <input type="text" placeholder="......................................................">
+            </div>
+            <div class="sig-col" style="display: flex; flex-direction: column; justify-content: flex-end;">
+                <p>......................................................</p>
+                <p>Tandatangan & Cop Rasmi</p>
+                <p>Tarikh:</p>
+            </div>
+        </div>
+
+        <div style="font-size: 7pt; margin-top: 12px; border-top: 1px solid #ccc; padding-top: 5px;">
+            * Sila kembalikan borang ini ke Pejabat Am SSeMS sekurang-kurangnya 7 hari sebelum tarikh penggunaan.
+        </div>
+    </div>
+
+    <!-- FLOATING CONTROLS -->
+    <div class="controls">
+        <button class="btn btn-save" onclick="saveForm()">
+            <span>💾</span> Simpan Rekod
+        </button>
+        <button class="btn btn-email" onclick="sendEmail()">
+            <span>📧</span> Emel Pegawai
+        </button>
+        <button class="btn btn-print" onclick="window.print()">
+            <span>🖨️</span> Cetak / Simpan PDF
+        </button>
+    </div>
+
+    <script>
+        function saveForm() {
+            const status = document.createElement('div');
+            status.style.position = 'fixed';
+            status.style.top = '20px';
+            status.style.left = '50%';
+            status.style.transform = 'translateX(-50%)';
+            status.style.backgroundColor = '#28a745';
+            status.style.color = 'white';
+            status.style.padding = '10px 20px';
+            status.style.borderRadius = '5px';
+            status.style.zIndex = '2000';
+            status.innerText = 'Maklumat borang telah disimpan secara lokal.';
+            document.body.appendChild(status);
+            
+            setTimeout(() => status.remove(), 3000);
+        }
+
+        function sendEmail() {
+            const nama = document.getElementById('nama').value || "[Tiada Nama]";
+            const tujuan = document.getElementById('tujuan').value || "[Tiada Tujuan]";
+            const tarikh = document.getElementById('t_mula').value;
+            const masa = document.getElementById('j_mula').value;
+            const sukanDetail = document.getElementById('f_sukan_detail').value;
+            const tarikhMohon = document.getElementById('t_permohonan').value || "[Tiada Tarikh]";
+            const jawatanMohon = document.getElementById('j_permohonan_sig').value || "[Tiada Jawatan]";
+            
+            const checkboxes = document.querySelectorAll('input[name="fasi"]:checked');
+            let fasiTerpilih = [];
+            checkboxes.forEach((checkbox) => {
+                let val = checkbox.value;
+                if(val.includes("Padang / Gelanggang") && sukanDetail) {
+                    val += ` (${sukanDetail})`;
+                }
+                fasiTerpilih.push(val);
+            });
+            const fasiliti = fasiTerpilih.join(", ") || "[Tiada Fasiliti Dipilih]";
+
+            const mailtoLink = `mailto:hipnialza@gmail.com?subject=${encodeURIComponent('Permohonan Tempahan Kemudahan SSeMS - ' + nama)}&body=${encodeURIComponent(
+                'Salam Tuan,\n\nSaya ingin membuat permohonan tempahan kemudahan seperti berikut:\n\n' +
+                'Nama Pemohon: ' + nama + '\n' +
+                'Jawatan: ' + jawatanMohon + '\n' +
+                'Fasiliti: ' + fasiliti + '\n' +
+                'Tujuan: ' + tujuan + '\n' +
+                'Tarikh Penggunaan: ' + tarikh + '\n' +
+                'Masa: ' + masa + '\n' +
+                'Tarikh Permohonan: ' + tarikhMohon + '\n\n' +
+                'Borang fizikal yang telah lengkap akan diserahkan ke pejabat. Mohon maklum balas awal daripada pihak tuan.\n\nTerima kasih.'
+            )}`;
+
+            window.location.href = mailtoLink;
+        }
+    </script>
+</body>
+</html>
